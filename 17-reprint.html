@@ -1,0 +1,44 @@
+<html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+    const rootHandle=document.getElementById('root')
+    class RePrint extends React.Component{
+        constructor(){
+            super()
+            this.state={
+                comment:''
+            }
+        }
+        handleReprint=(e)=>{
+            const comment=e.target.value
+            this.setState({comment})
+        }
+        render(){
+            return(
+                <div>
+                    <h1>Re Print</h1>
+                    <input type='text' value={this.state.comment} onChange={this.handleReprint}/>
+                    <h1>{`h1 ${this.state.comment}`}</h1>
+                    <h2>{`h2 ${this.state.comment}`}</h2>
+                    <h3>{`h3 ${this.state.comment}`}</h3>
+                    <p>{`p ${this.state.comment}`}</p>
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<RePrint />,rootHandle)
+    </script>
+</body>
+
+</html>

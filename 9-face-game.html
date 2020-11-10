@@ -1,0 +1,56 @@
+<html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+        const user=[
+            {
+            id:1,
+            name:'john',
+            profile:'https://go.aws/3bXmjQo'
+            },
+            {
+            id:2,
+            name:'jack',
+            profile:'https://go.aws/3e2alqe'
+            },
+            {
+            id:3,
+            name:'Sam',
+            profile:'https://go.aws/2RfNvlo'
+            }
+        ]
+        const randomNo=Math.round(Math.random()*user.length)
+        console.log(randomNo)
+        function FaceGame(){
+            const userGuess=function(ele){
+               const guess=prompt('guess the name')
+               alert(guess==ele ?`You guessed it correctly`:`Your guess is wrong, this is ${ele}`)
+            }
+           return(
+                <div>
+                    <h1>Face Game</h1>
+                    <p>Guess the user's name</p>
+                        <div>
+                            <img src={user[randomNo].profile}/>
+                            <div style={{padding:'5px 0 0'}}>{<button onClick={()=>userGuess(user[randomNo].name)}>guess</button>}</div>
+                        </div>
+                           
+                 </div>
+            )
+        }
+
+        ReactDOM.render(<FaceGame />,document.getElementById('root'))
+    </script>
+</body>
+
+</html>

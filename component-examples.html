@@ -1,0 +1,201 @@
+<!--way of simplifying the usage of component and extracting component-->
+  <html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+    const author=
+        {avatarUrl:'http://www.google.com' ,name:'bala'}
+    
+function Avatar(props) {
+  return (
+    <div>
+        <img className="Avatar"
+        src={props.user.avatarUrl}
+        alt={props.user.name}
+        />
+        
+    </div>
+  );
+}
+    function Comment(props) {
+        
+    return (
+      <div className="Comment">
+        <div className="UserInfo">
+            <Avatar user={props.author} />
+          
+        </div>
+        <div className="Comment-text">
+          {props.text}
+        </div>
+        <div className="Comment-date">
+          <h1>{props.date.toLocaleTimeString()}</h1>
+        </div>
+      </div>
+    );
+  }
+     ReactDOM.render(<Comment  text='hello' date={new Date()} author={author}/>,document.getElementById('root'))
+     
+    /* function Clocktick(props){
+       
+       console.log(props)
+      return(
+        <div>
+        <h1>Display date</h1>
+        <p>{props.data.toLocaleTimeString()}</p>
+       </div>
+      )
+     }
+    
+       function tick(){
+       ReactDOM.render(<Clocktick data={new Date()}/>,document.getElementById('root'))
+       }
+     
+     setInterval(tick,1000)*/
+
+/*class Clock extends React.Component{
+  constructor(props){
+    super(props)
+    this.state={
+      date:new Date()
+    };
+  }
+
+  componentDidMount(){
+   this.timerId=setInterval(()=>this.tick(),1000);
+  }
+  componentWillUnmount(){
+clearInterval(this.timerId);
+  }
+
+  tick(){
+    this.setState({date:newDate()
+    })
+  }
+
+  render(){
+    return(
+      <div>
+      <h1>clock example</h1>
+      <p>{this.state.date.toLocaleTimeString()}</p>
+      </div>
+
+    )
+  }
+}
+ReactDOM.render(<Clock />,document.getElementById('root'))*/
+
+class MovieList extends React.Component{
+  constructor(){
+    super()
+    this.state={
+      movies:[
+      { id: 1, name: 'The Godfather', watched: false },
+      { id: 2, name: 'Kill Bill', watched: true },
+      { id: 3, name: 'Bourne Ultimatum', watched: true }
+      ],
+      users:[
+      {id:1,name:'user1',email:'user1@gmail.com'},
+      {id:2,name:'user2',email:'user2@gmail.com'},
+      {id:3,name:'user3',email:'user3@gmail.com'},
+      {id:4,name:'user4',email:'user4@gmail.com'}
+      ],
+      id:'',
+      name:'',
+      watched:false
+    }
+  }
+
+  handleRemove=(id)=>{
+    console.log(id)
+    const confirmremove=confirm('are you sure to cancel')
+    if(confirmremove){
+      this.setState(function(prevState){
+        return{
+          movies:prevState.movies.filter(function(ele){
+              return ele.id!=id
+          })
+        }
+      })
+    }
+  }
+  handleIdChange=(e)=>{
+    const id=e.target.value
+    this.setState({id})
+  }
+
+  handleNameChange=(e)=>{
+    const name=e.target.value
+    this.setState({name})
+  }
+
+  handleCheckChange=(e)=>{
+    console.log(e.target.checked)
+    const watched=e.target.checked
+    this.setState({watched})
+  }
+
+  handleSubmit=(e)=>{
+    
+    e.preventDefault()
+    const formData={
+      id:parseInt(this.state.id),
+      name:this.state.name,
+      watched:this.state.watched
+    }
+    this.setState(function(prevState){
+      return{
+        movies:prevState.movies.concat(formData),
+        id:'',
+        name:'',
+        watched:false
+      }
+    })
+  }
+  render(){
+    console.log(this.state)
+    return(
+      <div>
+        <h1>remove list-{this.state.movies.length}</h1>
+        <ul>
+          {
+            this.state.movies.map(movie=>{
+              return (
+                <li>
+                    {movie.name}
+                    <button onClick={()=>{this.handleRemove(movie.id)}}>remove</button>
+                </li>
+              )
+            })
+          }
+        </ul>
+        <h1>add movie list-{this.state.movies.length}</h1>
+        <form onSubmit={this.handleSubmit}>
+          <label>id</label>
+          <input type='text' value={this.state.id} onChange={this.handleIdChange}/>
+          <label>name</label>
+          <input type='text' value={this.state.name} onChange={this.handleNameChange}/>
+          <label>watched</label>
+          <input type='checkbox' checked={this.state.watched}  onChange={this.handleCheckChange}/> 
+          <br />
+          <input type='submit'/>  
+        </form>
+      </div>
+    )
+  }
+}
+ReactDOM.render(<MovieList />,document.getElementById('root'))
+    </script>
+</body>
+
+</html>

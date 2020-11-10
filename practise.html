@@ -1,0 +1,82 @@
+<html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+    const rootHandle=document.getElementById('root')
+    class Users extends React.Component{
+        state={
+            users:[],
+            username:'',
+            name:'',
+            email:''
+        }
+        componentDidMount(){
+            console.log('component did mount')
+            const url='https://jsonplaceholder.typicode.com/users'
+            const xhr=new XMLHttpRequest()
+            xhr.open('GET',url)
+            xhr.send()
+            xhr.onload=()=>{
+                //console.log( xhr.responseText)
+               const users=JSON.parse(xhr.responseText)
+                this.setState({users})
+            }
+        }
+        handleChange=(e)=>{
+            this.setState({
+                [e.target.name]:e.target.value
+            })
+        }
+        handleFocus=(e)=>{
+            this.state.users.map((ele)=>{
+                if(ele.username==this.state.username){
+                    const name=ele.name
+                    const email=ele.email
+                    //console.log(name,email)
+                    this.setState({
+                        name,email
+                    })
+                }
+            })
+        }
+       
+        render(){
+            return(
+               <UserForm user={this.state.users} username={this.state.username} name={this.state.name} email={this.state.email} handleChange={this.handleChange} handleFocus={this.handleFocus
+               }/>
+            )
+        }
+    }
+    function UserForm(props){
+        return(
+            <div>
+                    <h1>User Auto fill-{props.user.length}</h1>
+                    <form>
+                        <label>UserName</label><br/>
+                        <input type='text' value={props.username} name='username' onChange={props.handleChange}/><br/><br/>
+                        <label>Name</label><br/>
+                        <input type='text' value={props.name} name='name' onChange={props.handleChange} onFocus={props.handleFocus}/><br/><br/>
+                        <label>Email</label><br/>
+                        <input type='text' value={props.email} name='email' onChange={props.handleChange}
+                        /><br/><br />
+                        <input type='submit'/>
+                    </form>
+                </div>
+        )
+    }
+    ReactDOM.render(<Users />,rootHandle)
+    </script>
+</body>
+
+
+</html>

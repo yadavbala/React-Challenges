@@ -1,0 +1,75 @@
+<html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+        const user=[
+            {
+            id:1,
+            name:'john',
+            profile:'https://go.aws/3bXmjQo',
+            skills:['js','react','angular']
+            },
+            {
+            id:2,
+            name:'jack',
+            profile:'https://go.aws/3e2alqe',
+            skills:['ruby','python']
+            },
+            {
+            id:3,
+            name:'Sam',
+            profile:'https://go.aws/2RfNvlo',
+            skills:['aws','azure']
+            }
+        ]
+        function UserDetails(props){
+            return(
+                <div>
+                    <h1>Listing Users-{props.data.length}</h1>
+                    <table border='1'>
+                        <thead>
+                            <tr>
+                                <th>Profile</th>
+                                <th>Name</th>
+                                <th>Skills</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                props.data.map(function(ele){
+                                   return( <tr key={ele.id}>
+                                        <td><img src={ele.profile} /></td>
+                                        <td>{ele.name}</td>
+                                        <td>
+                                            <ul>
+                                                {
+                                                    ele.skills.map(function(ele,i){
+                                                        return <li key={i}>{ele}</li>
+                                                    })
+                                                }
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                   )
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            )
+        }
+        ReactDOM.render(<UserDetails data={user} />,document.getElementById('root'))
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+        class Users extends React.Component{
+            constructor(){
+                super()
+                this.state={
+                    users:[
+                        {id:1,name:'user1',email:'user1@gmail.com'},
+                        {id:2,name:'user2',email:'user2@gmail.com'},
+                        {id:3,name:'user3',email:'user3@gmail.com'},
+                        {id:4,name:'user4',email:'user4@gmail.com'}
+                    ],
+                    selected:'list'
+                }
+             }
+
+             handleChange=(e)=>{
+                 const selected=e.target.value
+                 this.setState({selected})
+             }
+
+             render(){
+                 return(
+                     <div>
+                        <form>
+                            <input type='radio' name='listtable' value='list' checked={this.state.selected=='list'} onChange={this.handleChange}/><label>list</label>
+                            <input type='radio' name='listtable' value='table' checked={this.state.selected=='table'} onChange={this.handleChange}/><label>table</label>
+                        </form>
+                    </div>
+                 )
+             }
+           
+        }
+
+        function List(props){
+            return(
+                <div>
+                    <h1>User List</h1>
+                    <ul>
+                        {
+                            props.data.map(function(ele){
+                                return <li key={ele.id}>{ele.name}-{ele.email}</li>
+                            })
+                        }
+                    </ul>
+                </div>
+            )
+        }
+
+        function Table(props){
+            return(
+                <div>
+                    <h1>user table</h1>
+                    <table border='1'>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>name</th>
+                                    <th>email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    props.data.map(function(user){
+                                        return(
+                                            <tr key={user.id}>
+                                                <td>{user.id}</td>
+                                                <td>{user.name}</td>
+                                                <td>{user.email}</td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                    </table>
+                </div>
+            )
+        }
+        ReactDOM.render(<Users />,document.getElementById('root'))
+    </script>
+</body>
+
+</html>

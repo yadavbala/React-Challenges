@@ -1,0 +1,110 @@
+<html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+        class Users extends React.Component{
+            constructor(){
+                super()
+                this.state={
+                    users:[
+                        {id:1,name:'user1',email:'user1@gmail.com'},
+                        {id:2,name:'user2',email:'user2@gmail.com'},
+                        {id:3,name:'user3',email:'user3@gmail.com'},
+                        {id:4,name:'user4',email:'user4@gmail.com'}
+                    ],
+                    
+                }
+            }
+            
+           handleSubmitChange=(e,mailId)=>{
+               e.preventDefault()
+               const guess=confirm('sure to remove the user email')
+               if(guess){
+                   this.setState(function(prevState){
+                       return{
+                           users:prevState.users.filter(ele=>{
+                               return ele.email!=mailId
+                           })
+                       }
+                   })
+               }
+           }
+            render(){
+                return(
+                    <div>
+                        
+                        <h1>Listing Users-{this.state.users.length}</h1>
+                        <UserTable data={this.state.users}/>
+                        <h1>Form</h1>
+                        <UserForm handleSubmitChange={this.handleSubmitChange}/>
+                    </div>
+                )
+            }
+        }
+        function UserTable(props){
+            return(
+                <table border='1'>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>name</th>
+                                    <th>email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    props.data.map(function(user){
+                                        return(
+                                            <tr key={user.id}>
+                                                <td>{user.id}</td>
+                                                <td>{user.name}</td>
+                                                <td>{user.email}</td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>
+            )
+        }
+
+       class UserForm extends React.Component{
+
+           constructor(){
+               super()
+               this.state={
+                emailId:''
+               }
+           }
+
+           handleEmailChange=(e)=>{
+                const email=e.target.value
+                this.setState({emailId:email})
+            }
+
+           render(){
+               console.log(this.props)
+               return(
+                <form onSubmit={(e)=>{this.props.handleSubmitChange(e,this.state.emailId)}}>
+                            <input type='text' value={this.state.emailId} onChange={this.handleEmailChange}/>
+                            <input type='submit' />
+                </form>
+               )
+           }
+       }
+
+        ReactDOM.render(<Users />,document.getElementById('root'))
+    </script>
+</body>
+
+</html>

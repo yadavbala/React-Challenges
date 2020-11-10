@@ -1,0 +1,90 @@
+<html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+    const rootHandle=document.getElementById('root')
+    class StoryBook extends React.Component{
+        constructor(){
+            super()
+            this.state={
+               title:'',
+               body:''
+            }
+        }
+
+       handleTitleChange=(e)=>{
+           const title=e.target.value
+           this.setState({title})
+           localStorage.setItem('titl',title)
+          
+
+       }
+
+       handleBodyChange=(e)=>{
+           const body=e.target.value
+           this.setState({body})
+           localStorage.setItem('bod',body)
+        }
+
+        componentDidMount(){
+            const a=localStorage.getItem('titl')
+            this.setState({title:a?a:this.state.title})
+            const b=localStorage.getItem('bod')
+            this.setState({body:b?b:this.state.body})
+        }
+
+        handleSubmit=(e)=>{
+            e.preventDefault()
+            /*const description=JSON.stringify({
+                title:this.state.title,
+                body:this.state.body
+            })
+            localStorage.setItem('storie',description)*/
+        }
+      
+        render(){
+           
+            return(
+                <div>
+                    <h1>Story Book</h1>
+                    <form onSubmit={this.handleSubmit}>
+                        <label>Title</label><br/>
+                        <input 
+                        type='text' 
+                        value={this.state.title}
+                        name='title'
+                        onChange={this.handleTitleChange}
+                        /><br/><br/>
+                        <label>Body</label><br/>
+                        <textarea
+                        name='body'
+                        value={this.state.body}
+                        onChange={this.handleBodyChange}
+                        >
+                        </textarea><br/><br/>
+                        <button 
+                        onClick=
+                    {()=>{window.location.reload()}}>
+                        reload</button>
+                        <button>save</button>
+                    </form>
+                </div>
+            )
+        }
+    }
+
+   ReactDOM.render(<StoryBook/>,rootHandle)
+    </script>
+</body>
+
+</html>

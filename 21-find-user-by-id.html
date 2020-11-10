@@ -1,0 +1,74 @@
+<html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+    const rootHandle=document.getElementById('root')
+    class UserDetails extends React.Component{
+        constructor(){
+            super()
+            this.state={
+                users:{},
+                userInp:''
+            }
+        }
+        handleChange=(e)=>{
+            this.setState({
+                [e.target.name]:e.target.value
+            })
+        }
+        handleSubmit=(e)=>{
+            e.preventDefault()
+            const userinp=this.state.userInp
+            const url=`https://jsonplaceholder.typicode.com/users/${userinp}`
+            const xhr=new XMLHttpRequest()
+            xhr.open('get',url)
+            xhr.send()
+            xhr.onload=()=>{
+               const users=JSON.parse(xhr.responseText)
+               console.log(users)
+               this.setState({users})
+            }
+            xhr.onerror=()=>{
+                console.log(xhr.responseText)
+            }
+            this.setState({
+                userInp:'',
+            })
+        }
+        render(){
+            console.log(this.state)
+            return(
+                <div>
+                    <h1>Get user info</h1>
+                    <form onSubmit={this.handleSubmit}>
+                        <input
+                            type='text'
+                            value={this.state.userInp}
+                            name='userInp'
+                            onChange={this.handleChange}
+                            placeholder='enter id to fetch'
+                        />
+                        <input type='submit'/>
+                    </form>
+                    <h1>User Details</h1>
+                    <div>
+                       {Object.keys(this.state.users).length==0 ?'---':`${this.state.users.id} - ${this.state.users.name} - ${this.state.users.email} - ${this.state.users.address.city}`}
+                    </div>
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<UserDetails />,rootHandle)
+    </script>
+</body>
+
+</html>

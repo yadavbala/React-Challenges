@@ -1,0 +1,260 @@
+<html>
+<title>
+</title>
+
+<body>
+    <div id="root"></div>
+
+    <!-- https://unpkg.com/react@16.13.1/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+        const rootHandle = document.getElementById('root')
+                const date=new Date()
+                let dd=date.getDate()
+                let mm=(date.getMonth()+1)
+                const yyyy=(date.getFullYear())
+                if(mm<10) {mm='0'+mm}
+                if(dd<10) {dd='0'+dd} 
+                const date1=yyyy+'-'+mm+'-'+dd
+        class MovieList extends React.Component {
+            constructor() {
+                super()
+                this.state = {
+                    movies: [
+                        {id: 1, name: 'The Godfather', rating: 4,genre:['action'],dateWatch:'2020-04-10',watched:true},
+                        { id: 2, name: 'rush hour', rating: 4.5,genre:['action','romance'],dateWatch:'',watched:false}
+                    ],
+                    checkbox:[
+                            {id:1,name:'action',value:'action',check:false},
+                            {id:2,name:'drama',value:'drama',check:false},
+                            {id:3,name:'romance',value:'romance',check:false}
+                    ],
+                    id:'',
+                    name:'',
+                    rating:'',
+                    seen:false,
+                    date:'',
+                    action:false,
+                    drama:false,
+                    romance:false,
+                    genreType:[],
+                    d:false
+                }
+            }
+
+           
+
+            handleIdChange=(e)=>{
+                const id=e.target.value
+                this.setState({id})
+               
+            }
+
+            handleNameChange=(e)=>{
+                const name=e.target.value
+                this.setState({name})
+            }
+
+            handleRatingChange=(e)=>{
+                const rating=e.target.value
+                this.setState({rating})
+            }
+
+            handleSeen=(e)=>{
+                const seen=e.target.checked
+                this.setState({seen})
+            }
+
+            handleDate=(e)=>{
+                const date=e.target.value
+                this.setState({date})
+            }
+
+           
+            handleChange=(e,value,id)=>{
+                const den=e.target.checked
+                    const el=e.target.value
+                if(e.target.checked){
+                   
+                    this.setState(function(prevState){
+                        return{
+                            d:den,
+                            genreType:prevState.genreType.concat(el)
+                        }
+                    })
+                }
+                this.setState((prevState)=>{
+                 return{
+                     checkbox:this.state.checkbox.map(ele=>{
+                         if(ele.id==id){
+                             return Object.assign({},ele,{check:!ele.check})
+                         }
+                         else{
+                             return Object.assign({},ele)
+                         }
+                     })
+
+                 }  
+              })
+            }
+            
+            handleCheckChange=(id,e)=>{
+                console.log(e.target.checked)
+                if(e.target.checked){
+                    this.setState(function(prevState){
+                        return{
+                            movies:prevState.movies.map(function(ele){
+                                if(ele.id==id){
+                                    return Object.assign({},ele,{dateWatch:date1})
+                                }
+                                else{
+                                    return Object.assign({},ele)
+                                }
+                            })
+                        }
+                    })
+                }
+               
+                
+                this.setState(function(prevState){
+                    return{
+                        movies:prevState.movies.map(function(ele){
+                            if(ele.id==id){
+                                return Object.assign({},ele,{watched:!ele.watched})
+                            }
+                            else{
+                                return Object.assign({},ele)
+                            }
+                        })
+                    }
+                })
+            }
+
+            handleRemoveChange=(id)=>{
+                const confirmRemove=confirm('are you sure you want to cancel')
+                if(confirmRemove){
+                this.setState(function(prevState){
+                    return{
+                        movies:this.state.movies.filter(function(ele){
+                            return ele.id!=id
+                        })
+                    }
+                })
+            }
+            }
+
+            handleSubmit=(e)=>{
+                e.preventDefault()
+                const formData={
+                    id:parseInt(this.state.id),
+                    name:this.state.name,
+                    rating:parseFloat(this.state.rating),
+                    genre:this.state.genreType,
+                    dateWatch:this.state.date,
+                    watched:this.state.seen
+                }
+                this.setState(function(prevState){
+                    return{
+                        movies:prevState.movies.concat(formData),
+                        id:'',
+                        name:'',
+                        rating:'',
+                        genre:'',
+                        dateWatch:'',
+                        watched:false,
+                        date:false,
+                        action:false,
+                        drama:false,
+                        romance:false,
+                       genreType:[],
+                       seen:false,
+                       d:false,
+                      
+                    }
+                })
+            }
+            
+            render(){
+                //console.log(date1)
+                console.log(this.state)
+                return(
+                    <div>
+                        <h1>Movie list-{this.state.movies.length}</h1>
+                        <table border='1'>
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>name</th>
+                                    <th>rating</th>
+                                    <th>genre</th>
+                                    <th>date watch</th>
+                                    <th>action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               {
+                                   this.state.movies.map((movie)=>{
+                                       const separator=','
+                                   return(    
+                                    <tr>
+                                    <td>{movie.id}</td>
+                                    <td>{movie.name}</td>
+                                    <td>{movie.rating}</td>
+                                    <td>
+                                        {
+                                            movie.genre.map((ele,i,arr)=>{
+                                                return (i?',':'')+ele
+                                            })
+                                        }
+                                    </td>
+                                    <td>{movie.watched ? movie.dateWatch:'-'}</td>
+                                    <td><input type='checkbox' checked={movie.watched} onChange={(e)=>{this.handleCheckChange(movie.id,e)}}/><button onClick={()=>       {  this.handleRemoveChange(movie.id)}}>remove</button></td>
+                                    
+                                    </tr>
+                                   )
+                                   })
+                               }
+                            </tbody>
+                        </table>
+                        <h1>add movie</h1>
+                        <form onSubmit={this.handleSubmit}>
+                            <label htmlFor='movieId'>id</label>
+                            <input type='text' name='id' id='movieId' value={this.state.id} onChange={this.handleIdChange}/><br />
+                            
+                            <label htmlFor='movieName'>name</label>
+                            <input type='text' id='movieName' value={this.state.name} onChange={this.handleNameChange}/><br />
+                            <label htmlFor='movieRating'>rating</label>
+                            <input type='number' id='movieRating' value={this.state.rating} onChange={this.handleRatingChange}/><br />
+                            <label htmlFor='movieGenre'>genre</label>
+                           
+                            {
+                                this.state.checkbox.map(ele=>{
+                                    return <div><input type='checkbox' value={ele.value} name={ele.name} checked={ele.check} onChange={(e)=>{this.handleChange(e,ele.value,ele.id)}}/><label>{ele.value}</label></div>
+                                })
+                            }
+                            
+                            <label htmlFor="movieWatch">watched</label>
+                            <input type='checkbox' id='movieWatch' checked={this.state.seen} onChange={this.handleSeen} />
+                            {this.state.seen &&<div><label htmlFor='movieDate'>date</label>
+                            <input type='date' id='movieDate' value={this.state.date} onChange={this.handleDate}/></div>}<br/>
+                            <input type='submit' value='add'/>
+                        </form>
+                    </div>
+                )
+            }
+
+           
+        }
+
+        ReactDOM.render(<MovieList />, rootHandle)
+
+
+
+    </script>
+</body>
+
+</html>
